@@ -2,7 +2,7 @@
 //
 
 // database configuration
-var connectionString = 'mongodb://localhost/crud';  // connection string
+var connectionString = 'mongodb://localhost/crud';  // connection url and database
 var collection = 'things';                          // the collection we use
 
 // initialize mongo client
@@ -34,7 +34,7 @@ app.get('/items', function(req, res) {
 app.get('/items/:itemid', function(req, res) {
     var items = db.collection(collection).find({itemid: req.params.itemid}).toArray(function(err, result) {
         if (err) return res.sendStatus(500).send(err);
-        console.log('fetched', req.params.itemid);
+        console.log('fetched', req.params.itemid, result);
         return res.send(result);
     });
 });
@@ -44,7 +44,7 @@ app.post('/items/:itemid', function(req, res) {
     req.body.itemid = req.params.itemid;
     db.collection(collection).update({itemid: req.params.itemid}, req.body, {upsert: true}, function(err, result) {
         if (err) return res.sendStatus(500).send(err);
-        console.log('saved', req.params.itemid);
+        console.log('saved', req.params.itemid, req.body);
         res.sendStatus(200);
     });
 });
@@ -72,5 +72,14 @@ dbclient.connect(connectionString, function(err, database) {
     // start the web server
     app.listen(3000, function() {
         console.log('Server is up...');
+/*
+        console.log('_router:', app._router);
+        app._router.stack.forEach(function(route) {
+            console.log(route.name, route.path, route.keys, route.regexp, route.route);
+        });
+*/
     });
+
+
+
 });

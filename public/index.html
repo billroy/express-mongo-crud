@@ -1,2 +1,47 @@
-Replace this with your app's index.html.
-Put other static files in this folder.
+<!DOCTYPE html>
+<html><head>
+<script type='text/javascript' src='https://code.jquery.com/jquery-3.0.0.min.js'></script>
+<script>
+
+function show(text) {
+    $('#output').append(text + '<br/>');
+}
+
+function getItems() {
+    $.ajax('http://localhost:3000/items', {
+        type: 'get',
+        success: function(data, textStatus, jqxhr) {
+            show(JSON.stringify(data, null, 4));
+        },
+        error: function(jqxhr, textStatus, errorThrown) {
+            show('Error: ' + errorThrown);
+        }
+    });
+}
+
+function saveItem(item) {
+    $.ajax('http://localhost:3000/items/' + item.itemid, {
+        type: 'post',
+        data: JSON.stringify(item),
+        contentType: 'application/json; charset=utf-8',
+        success: function(data, textStatus, jqxhr) {
+            show('Item created');
+        },
+        error: function(jqxhr, textStatus, errorThrown) {
+            show('Error: ' + errorThrown);
+        }
+    });
+}
+
+// test for the code above
+getItems();
+saveItem({itemid:''+Math.floor(Math.random()*10000), status: 'pending', comment: 'new item'});
+saveItem({itemid:''+Math.floor(Math.random()*10000), status: 'pending', comment: 'new item'});
+saveItem({itemid:''+Math.floor(Math.random()*10000), status: 'pending', comment: 'new item'});
+getItems();
+
+</script>
+</head><body>
+    <p>Replace public/index.html with your app's index.html. Put other static files in this folder.</p>
+    <div id='output'></div>
+</body></html>

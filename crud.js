@@ -30,30 +30,30 @@ app.get('/items', function(req, res) {
     });
 });
 
-// get one item by itemid
-app.get('/items/:itemid', function(req, res) {
-    var items = db.collection(collection).find({itemid: req.params.itemid}).toArray(function(err, result) {
+// get one item by id
+app.get('/items/:id', function(req, res) {
+    var items = db.collection(collection).find({id: req.params.id}).toArray(function(err, result) {
         if (err) return res.sendStatus(500).send(err);
-        console.log('fetched', req.params.itemid, result);
+        console.log('fetched', req.params.id, result);
         return res.send(result);
     });
 });
 
-// upsert (create or update) an item by itemid
-app.post('/items/:itemid', function(req, res) {
-    req.body.itemid = req.params.itemid;
-    db.collection(collection).update({itemid: req.params.itemid}, req.body, {upsert: true}, function(err, result) {
+// upsert (create or update) an item by id
+app.post('/items/:id', function(req, res) {
+    req.body.id = req.params.id;
+    db.collection(collection).update({id: req.params.id}, req.body, {upsert: true}, function(err, result) {
         if (err) return res.sendStatus(500).send(err);
-        console.log('saved', req.params.itemid, req.body);
+        console.log('saved', req.params.id, req.body);
         res.sendStatus(200);
     });
 });
 
-// delete an item by itemid
-app.delete('/items/:itemid', function(req, res) {
-    db.collection(collection).remove({itemid: req.params.itemid}, function(err, result) {
+// delete an item by id
+app.delete('/items/:id', function(req, res) {
+    db.collection(collection).remove({id: req.params.id}, function(err, result) {
         if (err) return res.sendStatus(500).send(err);
-        console.log('deleted', req.params.itemid);
+        console.log('deleted', req.params.id);
         res.sendStatus(200);
     });
 });
